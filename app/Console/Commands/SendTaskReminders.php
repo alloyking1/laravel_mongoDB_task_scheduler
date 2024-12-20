@@ -2,13 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Task;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\TaskReminderNotification;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
-
 
 class SendTaskReminders extends Command
 {
@@ -31,14 +28,13 @@ class SendTaskReminders extends Command
      */
     public function handle()
     {
-        $now = Carbon::now('GMT+1');
-        $upcomingTasks = Task::where('reminder_time', '<=', $now->toDateTimeString())
-                                    ->where('reminder_time', '>=', $now->clone()->subMinutes(10)->toDateTimeString())
-                                    ->get();
+        $now = Carbon::now();
+        $upcomingTasks = Task::where('reminder_time', '<=', $now)
+            ->where('reminder_time', '>=', $now->clone()->subMinutes(10))
+            ->get();
 
         foreach ($upcomingTasks as $task) {
-
-            $emailBody = "
+            $emailBody = <<<EOF
                 Hello,
                 This is a reminder for your task:
                 Title: {$task->title}
@@ -47,15 +43,15 @@ class SendTaskReminders extends Command
                 Please make sure to complete it on time!
                 Regards,
                 Your Task Reminder App
-            ";
+                EOF;
 
             Mail::raw($emailBody, function ($message) use ($task) {
                 $message->to($task->email)
-                        ->subject("Task Reminder: {$task->title}");
+                    ->subject("Task Reminder: {$task->title}");
             });
             $this->info("Reminder email sent for task: {$task->title}");
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }
