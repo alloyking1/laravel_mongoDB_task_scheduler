@@ -34,7 +34,7 @@ class SendTaskReminders extends Command
             ->get();
 
         foreach ($upcomingTasks as $task) {
-            $emailBody = "
+            $emailBody = <<<EOF
                 Hello,
                 This is a reminder for your task:
                 Title: {$task->title}
@@ -43,7 +43,7 @@ class SendTaskReminders extends Command
                 Please make sure to complete it on time!
                 Regards,
                 Your Task Reminder App
-            ";
+                EOF;
 
             Mail::raw($emailBody, function ($message) use ($task) {
                 $message->to($task->email)
