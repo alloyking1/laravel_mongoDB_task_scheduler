@@ -1,10 +1,8 @@
 <?php
 
-use MongoDB\Driver\Manager;
-use Illuminate\Support\Facades\Route;
-
-use App\Http\Controllers\TaskController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\TaskController;
+use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,21 +18,21 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-
 Route::resource('tasks', TaskController::class)->middleware('auth');
 
 Route::get('/info', function () {
     phpinfo();
-}); 
+});
 
-Route::get('/ping', function (Request  $request) {    
+Route::get('/ping', function (Request $request) {
     $connection = DB::connection('mongodb');
     $msg = 'You are connected to MongoDB!';
-    try {  
-        $connection->command(['ping' => 1]);  
-    } catch (\Exception  $e) {  
-        $msg = 'You are note connected to MongoDB. Error: ' . $e->getMessage();
+    try {
+        $connection->command(['ping' => 1]);
+    } catch (\Exception  $e) {
+        $msg = 'You are note connected to MongoDB. Error: '.$e->getMessage();
     }
+
     return ['msg' => $msg];
 });
 

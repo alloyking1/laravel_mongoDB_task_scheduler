@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
 use App\Models\Task;
+use Illuminate\Http\Request;
 
 class TaskController extends Controller
 {
@@ -13,6 +13,7 @@ class TaskController extends Controller
     public function index()
     {
         $tasks = Task::where('email', auth()->user()->email)->get();
+
         return view('tasks.index', compact('tasks'));
     }
 
@@ -29,8 +30,6 @@ class TaskController extends Controller
      */
     public function store(Request $request)
     {
-        
-        
 
         $request->validate([
             'title' => 'required|string|max:255',
@@ -41,10 +40,11 @@ class TaskController extends Controller
 
         $data = $request->all();
         $data['due_date'] = \Carbon\Carbon::parse($request->due_date)->format('Y-m-d H:i:s');
-        $data['reminder_time'] =  \Carbon\Carbon::parse($request->reminder_time)->format('Y-m-d H:i:s');
+        $data['reminder_time'] = \Carbon\Carbon::parse($request->reminder_time)->format('Y-m-d H:i:s');
         $data['email'] = auth()->user()->email;
 
         Task::create($data);
+
         return redirect()->route('tasks.index')->with('success', 'Task created successfully.');
     }
 
@@ -62,6 +62,7 @@ class TaskController extends Controller
     public function edit(string $id)
     {
         $tasks = Task::where('id', $id)->get();
+
         return view('tasks.edit', ['tasks' => $tasks]);
     }
 
@@ -74,7 +75,7 @@ class TaskController extends Controller
 
         $data = $request->all();
         $data['due_date'] = \Carbon\Carbon::parse($request->due_date)->format('Y-m-d H:i:s');
-        $data['reminder_time'] =  \Carbon\Carbon::parse($request->reminder_time)->format('Y-m-d H:i:s');
+        $data['reminder_time'] = \Carbon\Carbon::parse($request->reminder_time)->format('Y-m-d H:i:s');
 
         $task->update($data);
 

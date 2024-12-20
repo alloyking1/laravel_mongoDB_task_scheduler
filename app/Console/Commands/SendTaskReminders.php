@@ -2,13 +2,10 @@
 
 namespace App\Console\Commands;
 
-use Illuminate\Console\Command;
 use App\Models\Task;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Notification;
-use App\Notifications\TaskReminderNotification;
+use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Mail;
-
 
 class SendTaskReminders extends Command
 {
@@ -33,11 +30,10 @@ class SendTaskReminders extends Command
     {
         $now = Carbon::now('GMT+1');
         $upcomingTasks = Task::where('reminder_time', '<=', $now->toDateTimeString())
-                                    ->where('reminder_time', '>=', $now->clone()->subMinutes(10)->toDateTimeString())
-                                    ->get();
+            ->where('reminder_time', '>=', $now->clone()->subMinutes(10)->toDateTimeString())
+            ->get();
 
         foreach ($upcomingTasks as $task) {
-
             $emailBody = "
                 Hello,
                 This is a reminder for your task:
@@ -51,7 +47,7 @@ class SendTaskReminders extends Command
 
             Mail::raw($emailBody, function ($message) use ($task) {
                 $message->to($task->email)
-                        ->subject("Task Reminder: {$task->title}");
+                    ->subject("Task Reminder: {$task->title}");
             });
             $this->info("Reminder email sent for task: {$task->title}");
         }

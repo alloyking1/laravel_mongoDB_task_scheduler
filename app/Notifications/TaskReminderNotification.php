@@ -3,13 +3,13 @@
 namespace App\Notifications;
 
 use Illuminate\Bus\Queueable;
-use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
 class TaskReminderNotification extends Notification
 {
     use Queueable;
+
     public $task;
 
     /**
@@ -36,9 +36,9 @@ class TaskReminderNotification extends Notification
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->line('Reminder for your task: ' . $this->task->title)
-            ->line('Due Date: ' . $this->task->due_date->toDayDateTimeString())
-            ->action('View Task', url('/tasks/' . $this->task->id))
+            ->line('Reminder for your task: '.$this->task->title)
+            ->line('Due Date: '.$this->task->due_date->toDayDateTimeString())
+            ->action('View Task', url('/tasks/'.$this->task->id))
             ->line('Thank you for using our application!');
     }
 
