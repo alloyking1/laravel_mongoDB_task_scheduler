@@ -26,11 +26,11 @@ Route::get('/info', function () {
 
 Route::get('/ping', function (Request $request) {
     $connection = DB::connection('mongodb');
-    $msg = 'You are connected to MongoDB!';
     try {
         $connection->command(['ping' => 1]);
+        $msg = 'You are connected to MongoDB!';
     } catch (\Exception  $e) {
-        $msg = 'You are note connected to MongoDB. Error: '.$e->getMessage();
+        $msg = 'You are not connected to MongoDB. Error: '.$e->getMessage();
     }
 
     return ['msg' => $msg];
