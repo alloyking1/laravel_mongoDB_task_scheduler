@@ -52,6 +52,6 @@ class SendTaskReminders extends Command
             $this->info("Reminder email sent for task: {$task->title}");
         }
 
-        return 0;
+        return self::SUCCESS;
     }
 }
