@@ -29,7 +29,9 @@ class SendTaskReminders extends Command
     public function handle()
     {
         $now = Carbon::now();
-        $upcomingTasks = Task::where('last_notification_date', null)->get();
+        $upcomingTasks = Task::where('last_notification_date', null)
+            ->where('reminder_time', '>=', $now->clone()->subMinutes(10))
+            ->get();
 
         foreach ($upcomingTasks as $task) {
             $emailBody = <<<EOF
