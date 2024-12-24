@@ -42,7 +42,7 @@ class TaskController extends Controller
         $data['due_date'] = Carbon::parse($request->due_date);
         $data['reminder_time'] = Carbon::parse($request->reminder_time);
         $data['email'] = auth()->user()->email;
-        $data['last_notification_date'] = NULL;
+        $data['last_notification_date'] = null;
 
         Task::create($data);
 

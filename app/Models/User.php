@@ -9,10 +9,10 @@ use MongoDB\Laravel\Eloquent\DocumentModel;
 
 class User extends Authenticatable
 {
+    use DocumentModel;
+
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
-    use DocumentModel;
 
     protected $connection = 'mongodb';
 
